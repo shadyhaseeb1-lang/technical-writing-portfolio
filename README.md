@@ -34,3 +34,27 @@ add_action('wp_head', function () {
 
     echo '<script type="application/ld+json">' . wp_json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</script>\n";
 }, 20);
+
+### Code Behind the Calculation (Python)
+
+```python
+import pandas as pd
+
+# Expected columns in a GSC Pages comparison export:
+# Page, Current Impressions, Previous Impressions, Current Clicks, Previous Clicks
+df = pd.read_csv("gsc_pages_comparison.csv")
+
+df["impression_delta"] = df["Current Impressions"] - df["Previous Impressions"]
+df["impression_lift_pct"] = df.apply(
+    lambda r: round(((r["Current Impressions"] - r["Previous Impressions"]) / r["Previous Impressions"]) * 100, 1)
+    if r["Previous Impressions"] > 0
+    else None,
+    axis=1,
+)
+
+total_curr_impressions = df["Current Impressions"].sum()
+df["share_of_total_pct"] = ((df["Current Impressions"] / total_curr_impressions) * 100).round(1)
+
+top_movers = df.sort_values("impression_delta", ascending=False).head(3)
+print(top_movers[["Page", "Previous Impressions", "Current Impressions", "impression_delta", "impression_lift_pct", "share_of_total_pct"]])
+```
