@@ -1,16 +1,16 @@
-# technical-writing-portfolio
-Technical writing samples, WordPress SEO/GEO automation, and search analytics data by Eng. Shady Haseeb.
+//# technical-writing-portfolio
+//Technical writing samples, WordPress SEO/GEO automation, and search analytics data by Eng. Shady Haseeb.
 
-Here are two technical writing samples tailored to your background in WordPress/SEO architecture and workflow automation, including the code and data behind the numbers in the second piece.
+//Here are two technical writing samples tailored to your background in WordPress/SEO architecture and workflow automation, including the code and data behind the numbers in the second piece.
 
-1. WordPress Technical SEO & GEO: Automating Clean Schema & Crawl Headers
-When optimizing WordPress sites for both traditional search engines and Generative Engine Optimization (GEO), clean structured data and predictable HTTP/HTML signals help crawlers and AI answer engines parse entities without bloating page weight.
+//1. WordPress Technical SEO & GEO: Automating Clean Schema & Crawl Headers
+//When optimizing WordPress sites for both traditional search engines and Generative Engine Optimization (GEO), clean structured data and predictable HTTP/HTML signals help crawlers and AI answer engines parse entities //without bloating page weight.
 
-Entity-First Schema Injection: Rather than stacking heavy multi-purpose plugins that output redundant JSON-LD blocks, hook a lightweight function into wp_head only on singular posts/pages where the entity applies.
+//Entity-First Schema Injection: Rather than stacking heavy multi-purpose plugins that output redundant JSON-LD blocks, hook a lightweight function into wp_head only on singular posts/pages where the entity applies.
 
-Crawl & Cache Alignment: Keep HTML output deterministic so edge caching (such as Cloudflare) and page-cache plugins serve identical markup to both users and search bots.
+//Crawl & Cache Alignment: Keep HTML output deterministic so edge caching (such as Cloudflare) and page-cache plugins serve identical markup to both users and search bots.
 
-Measurable Markup Overhead: A minimal Organization + Article JSON-LD payload typically adds only ~450–700 bytes uncompressed (roughly ~250–350 bytes over gzip/Brotli), keeping transfer overhead negligible while clarifying authorship, dates, and topical entities.
+//Measurable Markup Overhead: A minimal Organization + Article JSON-LD payload typically adds only ~450–700 bytes uncompressed (roughly ~250–350 bytes over gzip/Brotli), keeping transfer overhead negligible while //clarifying authorship, dates, and topical entities.
 
 <?php
 add_action('wp_head', function () {
@@ -35,16 +35,16 @@ add_action('wp_head', function () {
 }, 20);
 
 
-2. Search Console & Content Velocity: Computing Period-over-Period Impression Lift
-When reporting SEO or content growth from Google Search Console exports (such as a Pages.csv export comparing a current window against a prior baseline window), computing exact impression deltas and share of total impressions prevents cherry-picking single-day spikes.
+//2. Search Console & Content Velocity: Computing Period-over-Period Impression Lift
+//When reporting SEO or content growth from Google Search Console exports (such as a Pages.csv export comparing a current window against a prior baseline window), computing exact impression deltas and share of total //impressions prevents cherry-picking single-day spikes.
 
-Baseline vs. Current Comparison: Match each URL across two equal-length windows (for example, 28 days prior vs. 28 days current) and calculate both absolute delta and percentage lift.
+//Baseline vs. Current Comparison: Match each URL across two equal-length windows (for example, 28 days prior vs. 28 days current) and calculate both absolute delta and percentage lift.
 
-Guard Against Zero-Baseline Noise: When a newly indexed URL moves from 0 impressions to 120 impressions, report the raw count (+120 impressions, new indexation) rather than an undefined percentage.
+//Guard Against Zero-Baseline Noise: When a newly indexed URL moves from 0 impressions to 120 impressions, report the raw count (+120 impressions, new indexation) rather than an undefined percentage.
 
-Code Behind the Calculation (Python)
+//Code Behind the Calculation (Python)
 
-import pandas as pd
+//import pandas as pd
 
 # Expected columns in a GSC Pages comparison export:
 # Page, Current Impressions, Previous Impressions, Current Clicks, Previous Clicks
