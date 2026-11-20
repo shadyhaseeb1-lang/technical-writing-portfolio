@@ -34,6 +34,16 @@ add_action('wp_head', function () {
 
     echo '<script type="application/ld+json">' . wp_json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</script>\n";
 }, 20);
+```
+
+---
+
+## 2. Search Console & Content Velocity: Computing Period-over-Period Impression Lift
+
+When reporting SEO or content growth from Google Search Console exports (such as a `Pages.csv` export comparing a current window against a prior baseline window), computing exact impression deltas and share of total impressions prevents cherry-picking single-day spikes.
+
+* **Baseline vs. Current Comparison:** Match each URL across two equal-length windows (for example, 28 days prior vs. 28 days current) and calculate both absolute delta and percentage lift.
+* **Guard Against Zero-Baseline Noise:** When a newly indexed URL moves from `0` impressions to `120` impressions, report the raw count (`+120` impressions, new indexation) rather than an undefined percentage.
 
 ### Code Behind the Calculation (Python)
 
@@ -58,3 +68,16 @@ df["share_of_total_pct"] = ((df["Current Impressions"] / total_curr_impressions)
 top_movers = df.sort_values("impression_delta", ascending=False).head(3)
 print(top_movers[["Page", "Previous Impressions", "Current Impressions", "impression_delta", "impression_lift_pct", "share_of_total_pct"]])
 ```
+
+### Sample Data & Output Behind the Numbers
+
+Suppose a 28-day GSC comparison across 4 tracked URLs (`total_curr_impressions = 10,000`) produces:
+
+| Page | Prev. Impressions | Curr. Impressions | Delta | Lift % | Share of Total |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| `/guides/local-seo-checklist/` | 1,250 | 3,550 | +2,300 | +184.0% | 35.5% |
+| `/guides/geo-ai-search-basics/` | 2,000 | 3,100 | +1,100 | +55.0% | 31.0% |
+| `/services/technical-seo-audit/` | 1,800 | 2,150 | +350 | +19.4% | 21.5% |
+| `/blog/new-release-notes/` | 0 | 1,200 | +1,200 | N/A (New) | 12.0% |
+
+From that dataset, `/guides/local-seo-checklist/` accounts for **35.5%** of total impressions (`3,550 / 10,000`) and a **184.0%** lift (`(3,550 - 1,250) / 1,250 * 100`), while overall impressions across the four pages rose from **5,050** to **10,000** (**+98.0%**).
